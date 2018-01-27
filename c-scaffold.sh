@@ -47,8 +47,8 @@ cd "${CURRENT_DIRECTORY}/${PROJECT_NAME}"
 touch "${MODULE_NAME}".c
 touch "${MODULE_NAME}".h
 touch minunit.h
-touch integrationtest.tcl
-touch test_${MODULE_NAME}.c
+touch maintest.tcl
+touch ${MODULE_NAME}test.c
 touch Makefile
 touch main.c
 touch README.mkd 
@@ -119,12 +119,9 @@ eval spawn [lrange \$argv 0 end]
 
 expect \"Hello from main\" {foreground green; puts \"PASSED\";reset} default {foreground red;puts \"FAILED\";reset}
 
-#expect \"What is the id:\" {foreground green; puts \"PASSED\";reset} default {foreground red;puts \"FAILED\";reset}
-#send \"0101\\r\"
-#expect \"name: Angel Perez, semestre: 6\" {foreground green; puts \"PASSED\";reset} default {foreground red;puts \"FAILED\";reset}
-" > integrationtest.tcl
+" > maintest.tcl
 
-chmod 755 integrationtest.tcl
+chmod 755 maintest.tcl
 
 {
   echo "LIB := \$(shell find ./lib -name '*.o')"
@@ -137,14 +134,14 @@ chmod 755 integrationtest.tcl
   echo -e "\t gcc -o ${MODULE_NAME}.exe ${MODULE_NAME}.o main.o \$(LIB)"
   echo ""
 
-  echo "test_${MODULE_NAME}: clean"
+  echo "${MODULE_NAME}test: clean"
   echo -e "\t gcc -c ${MODULE_NAME}.c"
-  echo -e "\t gcc -c test_${MODULE_NAME}.c"
-  echo -e "\t gcc -o test_${MODULE_NAME}.exe ${MODULE_NAME}.o test_${MODULE_NAME}.o"
-  echo -e "\t ./test_${MODULE_NAME}.exe"
+  echo -e "\t gcc -c ${MODULE_NAME}test.c"
+  echo -e "\t gcc -o ${MODULE_NAME}test.exe ${MODULE_NAME}.o ${MODULE_NAME}test.o"
+  echo -e "\t ./${MODULE_NAME}test.exe"
   echo ""
 
-  echo -e "test:\t test_${MODULE_NAME}"
+  echo -e "test:\t ${MODULE_NAME}test"
   echo ""
 
   echo "clean:"
@@ -162,7 +159,7 @@ chmod 755 integrationtest.tcl
   echo ""
 
   echo -e "runtest: ${MODULE_NAME}"
-  echo -e "\t ./integrationtest.tcl ./${MODULE_NAME}.exe"
+  echo -e "\t ./maintest.tcl ./${MODULE_NAME}.exe"
   echo ""
 
 } > Makefile
@@ -225,7 +222,7 @@ chmod 755 integrationtest.tcl
   echo '  return result != 0;'
   echo '}'
 
-} > test_${MODULE_NAME}.c
+} > ${MODULE_NAME}test.c
 
 echo 'Happy Coding!'
 echo ''
