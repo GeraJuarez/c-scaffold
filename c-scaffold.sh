@@ -54,7 +54,6 @@ touch main.c
 touch README.md 
 
 echo "# ${PROJECT_NAME}
-
 " > README.md
 
 echo "#include <stdlib.h>
@@ -99,31 +98,31 @@ chmod 755 maintest.tcl
   echo "LIB := \$(shell find ./lib -name '*.o')"
 
   echo "clean:"
-  echo -e "\t rm *.out *.o *.exe || exit 0"
+  echo -e "\trm *.out *.o *.exe || exit 0"
   echo ""
 
   echo "${MODULE_NAME}test: clean"
-  echo -e "\t gcc -c ${MODULE_NAME}.c"
-  echo -e "\t gcc -c ${MODULE_NAME}_test.c"
-  echo -e "\t gcc -o ${MODULE_NAME}test.exe ${MODULE_NAME}.o ${MODULE_NAME}test.o"
-  echo -e "\t ./${MODULE_NAME}test.exe"
+  echo -e "\tgcc -c ${MODULE_NAME}.c"
+  echo -e "\tgcc -c ${MODULE_NAME}_test.c"
+  echo -e "\tgcc -o ${MODULE_NAME}test.exe ${MODULE_NAME}.o ${MODULE_NAME}_test.o"
+  echo -e "\t./${MODULE_NAME}test.exe"
   echo ""
 
-  echo -e "test:\t ${MODULE_NAME}test"
+  echo -e "test: ${MODULE_NAME}test"
   echo ""
 
   echo "${MODULE_NAME}: clean"
-  echo -e "\t gcc -c ${MODULE_NAME}.c"
-  echo -e "\t gcc -c main.c"
-  echo -e "\t gcc -o ${MODULE_NAME}.exe ${MODULE_NAME}.o main.o \$(LIB)"
+  echo -e "\tgcc -c ${MODULE_NAME}.c"
+  echo -e "\tgcc -c main.c"
+  echo -e "\tgcc -o ${MODULE_NAME}.exe ${MODULE_NAME}.o main.o \$(LIB)"
   echo ""
 
   echo -e "maintest: ${MODULE_NAME}"
-  echo -e "\t ./maintest.tcl ./${MODULE_NAME}.exe"
+  echo -e "\t./maintest.tcl ./${MODULE_NAME}.exe"
   echo ""
 
   echo  "run: ${MODULE_NAME}"
-  echo -e "\t ./${MODULE_NAME}.exe"
+  echo -e "\t./${MODULE_NAME}.exe"
   echo ""
 
 } > Makefile
@@ -186,7 +185,7 @@ chmod 755 maintest.tcl
   echo '  	return result != 0;'
   echo '}'
 
-} > ${MODULE_NAME}test.c
+} > ${MODULE_NAME}_test.c
 
 echo 'Happy Coding!'
 echo ''
