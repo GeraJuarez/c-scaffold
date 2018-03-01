@@ -48,42 +48,14 @@ touch "${MODULE_NAME}".c
 touch "${MODULE_NAME}".h
 touch minunit.h
 touch maintest.tcl
-touch ${MODULE_NAME}test.c
+touch ${MODULE_NAME}_test.c
 touch Makefile
 touch main.c
-touch README.mkd 
+touch README.md 
 
-echo "
-# ${PROJECT_NAME}
+echo "# ${PROJECT_NAME}
 
-# How to compile
-make run
-
-# How to run test
-make test
-
-# How to debug the program
-gcc -g name_of_file.c -o name_of_file
-gdb name_of_file
-
-## How to start the Program
-break main
-run # Execute the program
-next # Next Line
-print &i # Print the address of the variable
-print sizeof(int) # Print sizeof the int type
-x/4xb &i # Get the raw bytes of i. I want to examinate 4 values formatted as hex numerals. byte by byte
-ptype i # Tell me the type of c expression
-x/12xb &a # a is an array
-
-# Linking stuff and generating the program
-
-If you have modules you have to compile one by one
-gcc -c module1.c # This command generates module1.o
-gcc -c program-that-depends-of-module1.c
-gcc -o program.out module1.o program-that-depends-of-module1.o
-./program.out
-" > README.mkd
+" > README.md
 
 echo "#include <stdlib.h>
 #include <stdio.h>
@@ -96,7 +68,7 @@ echo "#include <stdlib.h>
 
 /* Add function signatures here */
 
-int main(int argc, char **argv) {
+int main() {
   /* Start your code here */
   printf(\"Hello from main\\n\");
   return 0;
@@ -125,18 +97,14 @@ chmod 755 maintest.tcl
 
 {
   echo "LIB := \$(shell find ./lib -name '*.o')"
-  echo "all:"
-  # Make command complains about spaces :(
-  # fix: http://stackoverflow.com/questions/525872/echo-tab-characters-in-bash-script
-  # http://stackoverflow.com/questions/525872/echo-tab-characters-in-bash-script
-  echo -e "\t gcc -c ${MODULE_NAME}.c"
-  echo -e "\t gcc -c main.c"
-  echo -e "\t gcc -o ${MODULE_NAME}.exe ${MODULE_NAME}.o main.o \$(LIB)"
+
+  echo "clean:"
+  echo -e "\t rm *.out *.o *.exe || exit 0"
   echo ""
 
   echo "${MODULE_NAME}test: clean"
   echo -e "\t gcc -c ${MODULE_NAME}.c"
-  echo -e "\t gcc -c ${MODULE_NAME}test.c"
+  echo -e "\t gcc -c ${MODULE_NAME}_test.c"
   echo -e "\t gcc -o ${MODULE_NAME}test.exe ${MODULE_NAME}.o ${MODULE_NAME}test.o"
   echo -e "\t ./${MODULE_NAME}test.exe"
   echo ""
@@ -144,22 +112,18 @@ chmod 755 maintest.tcl
   echo -e "test:\t ${MODULE_NAME}test"
   echo ""
 
-  echo "clean:"
-  echo -e "\t rm *.out *.o *.exe || exit 0"
-  echo ""
-
   echo "${MODULE_NAME}: clean"
   echo -e "\t gcc -c ${MODULE_NAME}.c"
   echo -e "\t gcc -c main.c"
   echo -e "\t gcc -o ${MODULE_NAME}.exe ${MODULE_NAME}.o main.o \$(LIB)"
   echo ""
- 
-  echo  "run: ${MODULE_NAME}"
-  echo -e "\t ./${MODULE_NAME}.exe"
+
+  echo -e "maintest: ${MODULE_NAME}"
+  echo -e "\t ./maintest.tcl ./${MODULE_NAME}.exe"
   echo ""
 
-  echo -e "runtest: ${MODULE_NAME}"
-  echo -e "\t ./maintest.tcl ./${MODULE_NAME}.exe"
+  echo  "run: ${MODULE_NAME}"
+  echo -e "\t ./${MODULE_NAME}.exe"
   echo ""
 
 } > Makefile
@@ -191,35 +155,35 @@ chmod 755 maintest.tcl
 
   echo ""
   echo 'static char * testUnit() {'
-  echo '  muAssert("error, testUnit 1 != 1", 1 == 1);'
-  echo '  return 0;'
+  echo '  	muAssert("error, testUnit 1 != 1", 1 == 1);'
+  echo '  	return 0;'
   echo '}'
 
   echo ""
   echo 'static char * allTests() {'
-  echo '  muRunTest(testUnit);'
-  echo '  return 0;'
+  echo '  	muRunTest(testUnit);'
+  echo '  	return 0;'
   echo '}'
 
   echo ""
   echo 'int main(int argc, char **argv) {'
-  echo '  char *result = allTests();'
-  echo '  if (result != 0) {'
-  echo '    printf("-_-_-_-_-_-_-_,------,      o \n");'
-  echo '    printf("_-_-_-_-_-_-_-|   /\\_/\\ \n");'
-  echo '    printf("-_-_-_-_-_-_-~|__( X .X)  +     + \n");'
-  echo '    printf("_-_-_-_-_-_-_- \"\"  \"\" \n");'
-  echo '    printf(KRED "✗ %s \n" RESET, result);';
-  echo '  }'
-  echo '  else {'
-  echo '    printf("-_-_-_-_-_-_-_,------,      o \n");'
-  echo '    printf("_-_-_-_-_-_-_-|   /\\_/\\ \n");'
-  echo '    printf("-_-_-_-_-_-_-~|__( ^ .^)  +     + \n");'
-  echo '    printf("_-_-_-_-_-_-_-  \"\"  \"\" \n");'
-  echo '    printf(KGRN " ✓ ALL TESTS PASSED \n" RESET);'
-  echo '  }'
-  echo '  printf("Tests run: %d\n", testsRun);'
-  echo '  return result != 0;'
+  echo '	char *result = allTests();'
+  echo '  	if (result != 0) {'
+  echo '    	printf("-_-_-_-_-_-_-_,------,      o \n");'
+  echo '      	printf("_-_-_-_-_-_-_-|   /\\_/\\ \n");'
+  echo '      	printf("-_-_-_-_-_-_-~|__( X .X)  +     + \n");'
+  echo '      	printf("_-_-_-_-_-_-_- \"\"  \"\" \n");'
+  echo '      	printf(KRED "✗ %s \n" RESET, result);';
+  echo '	}'
+  echo '  	else {'
+  echo '      	printf("-_-_-_-_-_-_-_,------,      o \n");'
+  echo '      	printf("_-_-_-_-_-_-_-|   /\\_/\\ \n");'
+  echo '      	printf("-_-_-_-_-_-_-~|__( ^ .^)  +     + \n");'
+  echo '      	printf("_-_-_-_-_-_-_-  \"\"  \"\" \n");'
+  echo '      	printf(KGRN " ✓ ALL TESTS PASSED \n" RESET);'
+  echo '  	}'
+  echo '  	printf("Tests run: %d\n", testsRun);'
+  echo '  	return result != 0;'
   echo '}'
 
 } > ${MODULE_NAME}test.c

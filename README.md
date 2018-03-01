@@ -1,13 +1,13 @@
-C file struture for C projects
-
+# C file struture for C projects
 
 ## USAGE
 
 ```bash
-bash c-scaffold.sh <project-name> <module-name> 
+bash c-scaffold.sh <project-name> <module-name>
 ```
 
-Example 
+Example
+
 ```bash
 bash c-scaffold.sh nyancat rainbow
 
